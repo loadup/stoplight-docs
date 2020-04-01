@@ -10,7 +10,25 @@ info:
 servers:
   - url: order.goloadup.com/partner/api
     description: Production
-paths: {}
+paths:
+  /orders:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: get-orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+      parameters:
+        - schema:
+            type: string
+          in: query
 components:
   schemas: {}
   securitySchemes:
