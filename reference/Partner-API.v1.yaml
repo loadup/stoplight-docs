@@ -1,0 +1,20 @@
+openapi: 3.0.0
+info:
+  title: Partner API
+  version: '1.0'
+  description: Partner API to create and manage orders
+  contact:
+    name: LoadUp Engineering
+    email: engineering@goloadup.com
+    url: goloadup.com
+servers:
+  - url: order.goloadup.com/partner/api
+    description: Production
+paths: {}
+components:
+  schemas: {}
+  securitySchemes:
+    API Key - 1:
+      name: API Key
+      type: apiKey
+      in: header
