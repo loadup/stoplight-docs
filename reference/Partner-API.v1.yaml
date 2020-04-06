@@ -12,30 +12,54 @@ servers:
     description: Production
 paths:
   /orders:
-    get:
-      summary: Your GET endpoint
-      tags:
-        - fooey
+    post:
+      summary: ''
+      operationId: post-orders
       responses:
         '200':
           description: OK
-        '201':
-          description: Created
-      operationId: get-orders
+          headers:
+            header-0:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  '':
+                    type: string
+      description: Foeey dee blah di blah I am
       requestBody:
         content:
           application/json:
             schema:
               type: object
-              properties: {}
-      parameters:
-        - schema:
-            type: number
-          in: query
-          name: order-id
-          description: ''
+              properties:
+                order:
+                  $ref: '#/components/schemas/Order'
+        description: Send details about order
 components:
-  schemas: {}
+  schemas:
+    Order:
+      title: Order
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        location:
+          type: object
+          properties:
+            latitude:
+              type: string
+      x-examples:
+        'success ':
+          firstName: John
+      description: ''
   securitySchemes:
     API Key - 1:
       name: API Key
