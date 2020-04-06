@@ -14,10 +14,13 @@ paths:
   /orders:
     get:
       summary: Your GET endpoint
-      tags: []
+      tags:
+        - fooey
       responses:
         '200':
           description: OK
+        '201':
+          description: Created
       operationId: get-orders
       requestBody:
         content:
@@ -27,8 +30,10 @@ paths:
               properties: {}
       parameters:
         - schema:
-            type: string
+            type: number
           in: query
+          name: order-id
+          description: ''
 components:
   schemas: {}
   securitySchemes:
