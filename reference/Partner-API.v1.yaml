@@ -28,7 +28,12 @@ paths:
                 type: object
                 properties:
                   '':
-                    type: string
+                    $ref: '#/components/schemas/Order'
+              examples:
+                example-1:
+                  value:
+                    firstName: Ricky
+                    lastName: Bobby
       description: Foeey dee blah di blah I am
       requestBody:
         content:
