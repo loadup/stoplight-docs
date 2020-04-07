@@ -7,66 +7,181 @@ info:
     name: LoadUp Engineering
     email: engineering@goloadup.com
     url: goloadup.com
+  termsOfService: goloadup.com/terms
 servers:
   - url: order.goloadup.com/partner/api
     description: Production
 paths:
   /orders:
     post:
-      summary: ''
+      summary: Create an Order
       operationId: post-orders
       responses:
         '200':
           description: OK
-          headers:
-            header-0:
-              schema:
-                type: string
+          headers: {}
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  '':
-                    $ref: '#/components/schemas/Order'
+                  total:
+                    type: number
+                    description: Total charge for the order
+                    format: float
+                    example: '75.25'
+                  id:
+                    type: integer
               examples:
-                example-1:
+                Success - Create an Order:
                   value:
-                    firstName: Ricky
-                    lastName: Bobby
-      description: Foeey dee blah di blah I am
+                    id: 12345
+                    total: 75.25
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+              examples:
+                Invalid Inputs:
+                  value:
+                    errorCode: INCORRECTLY_FORMATTED_INPUT
+      description: Creates a standard LoadUp order
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                order:
-                  $ref: '#/components/schemas/Order'
-        description: Send details about order
+                orderFirstName:
+                  type: string
+                  example: John
+                  minLength: 1
+                  description: "Contact's First Name"
+                orderLastName:
+                  type: string
+                  example: Doe
+                  minLength: 1
+                  description: "Contact's Last Name"
+                orderEmail:
+                  type: string
+                  format: email
+                  example: johndoe@gmail.com
+                  description: "Contact's Email"
+                streetAddress:
+                  type: string
+                  example: 123 Main St
+                  minLength: 1
+                  description: Service Street Address
+                city:
+                  type: string
+                  example: Cityville
+                  minLength: 1
+                  description: Service Address City
+                date:
+                  type: string
+                  format: date
+                  example: '2020-12-31'
+                  minLength: 1
+                  pattern: "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$"
+                  description: Date formatted as YYYY-MM-DD
+                elevatorRestriction:
+                  type: boolean
+                  description: Whether there is an elevator restriction requiring a Certificate Of Insurance at the service address
+                flightsOfStairsCount:
+                  type: integer
+                  minimum: 0
+                  maximum: 10
+                  description: Number of flights of stairs at customer address
+                placement:
+                  type: string
+                  enum:
+                    - indoor
+                    - outdoor
+                  description: Whether the item will be indoor or outdoors
+                specialInstructions:
+                  type: string
+                  description: Special Instructions for the order
+                state:
+                  type: string
+                  description: S
+                timeslot:
+                  type: string
+                  enum:
+                    - morning
+                    - afternoon
+                    - evening
+                    - full_day
+                  description: Requested time of day for service
+                zip:
+                  type: string
+                  minLength: 5
+                  maxLength: 5
+                  description: Service Address Postal Code
+                items:
+                  type: array
+                  description: Items to service
+                  items:
+                    $ref: '#/components/schemas/ItemTypeInput'
+              required:
+                - orderFirstName
+                - orderLastName
+                - streetAddress
+                - city
+                - date
+                - elevatorRestriction
+                - flightsOfStairsCount
+                - placement
+                - state
+                - timeslot
+                - zip
+        description: ''
+      tags:
+        - orders
+      security:
+        - x-api-key: []
 components:
   schemas:
     Order:
       title: Order
       type: object
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        location:
-          type: object
-          properties:
-            latitude:
-              type: string
       x-examples:
         'success ':
           firstName: John
       description: ''
+      properties:
+        id:
+          type: integer
+        orderFirstName:
+          type: string
+        orderLastName:
+          type: string
+        orderPrimaryPhone:
+          type: string
+        orderEmail:
+          type: string
+    ItemTypeInput:
+      title: ItemTypeInput
+      type: object
+      properties:
+        slug:
+          type: string
+          description: One of the item slugs from the item types list
+        pickupCount:
+          type: integer
+          example: Number of items to pickup
+          minimum: 1
+      required:
+        - slug
+        - pickupCount
+      description: ''
   securitySchemes:
-    API Key - 1:
+    x-api-key:
       name: API Key
       type: apiKey
       in: header
+      description: Obtain your API key from the Settings section of your Partner portal
